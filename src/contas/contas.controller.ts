@@ -1,26 +1,25 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ContasService } from './contas.service';
-import { CarteiraEntity } from './entities/carteira.entity';
+import { DepositDto, WithdrawDto, CodClienteDto } from './dto';
 
 @Controller('conta')
 @ApiTags('conta')
 export class ContasController {
   constructor(private readonly contasService: ContasService) {}
 
-  @Get(':codCliente')
-  async findOne(@Param('codCliente') codCliente: string) {
-    console.log(codCliente);
-    return await this.contasService.findOne(+codCliente);
-  }
-
   @Post('deposito')
-  async deposit(@Body() body) {
-    return this.contasService.deposit(body);
+  async deposit(@Body() depositDto: DepositDto) {
+    return this.contasService.deposit(depositDto);
   }
 
   @Post('saque')
-  async withdraw(@Body() body) {
-    return await this.contasService.withdraw(body);
+  async withdraw(@Body() withdrawDto: WithdrawDto) {
+    return await this.contasService.withdraw(withdrawDto);
+  }
+
+  @Get(':codCliente')
+  async findOne(@Param('codCliente') codCliente: CodClienteDto) {
+    return await this.contasService.findOne(+codCliente);
   }
 }
