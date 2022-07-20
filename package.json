@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  },
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+ },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

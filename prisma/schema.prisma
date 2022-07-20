@@ -14,14 +14,14 @@ model TransacaoSaldo {
   id         Int      @id @default(autoincrement())
   conta      Conta    @relation(fields: [codCliente], references: [codCliente])
   codCliente Int      @unique
-  valor      Int
+  valor      Float
   createdAt  DateTime @default(now())
   tipo       String
 }
 
 model Conta {
   id             Int             @id @default(autoincrement())
-  username       String          @unique
+  email          String          @unique
   password       String
   codCliente     Int             @unique @default(autoincrement())
   carteira       Carteira?
@@ -30,7 +30,7 @@ model Conta {
 
 model Carteira {
   id              Int               @id @default(autoincrement())
-  saldo           Int               @default(0)
+  saldo           Float               @default(0)
   conta           Conta             @relation(fields: [codCliente], references: [codCliente])
   codCliente      Int               @unique
   carteiraAtivo   CarteiraAtivo[]
@@ -43,14 +43,15 @@ model CarteiraAtivo {
   carteiraId  Int  
   ativo       Ativo        @relation(fields: [codAtivo], references: [codAtivo])
   codAtivo    String          
+  quantidade  Int         
 }
 
 model Ativo {
   id              Int       @id @default(autoincrement())     
-  nome            String    
+  acao            String    
   codAtivo        String    @unique
-  valorAtivo      Int       
   qtdDisponivel   Int     
+  valorAtivo      Float       
   carteiraAtivo   CarteiraAtivo[]  
   transacaoAtivo  TransacaoAtivo[]
 }
