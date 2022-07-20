@@ -198,7 +198,7 @@ async function main() {
     update: {},
     create: {
       carteiraId: 1,
-      codAtivo: 'ABEV',
+      codAtivo: 'ABEV3',
       quantidade: 500,
     },
   });
