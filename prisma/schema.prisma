@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TransacaoSaldo {
+  id         Int      @id @default(autoincrement())
+  conta      Conta    @relation(fields: [codCliente], references: [codCliente])
+  codCliente Int      @unique
+  valor      Int
+  createdAt  DateTime @default(now())
+  tipo       String
+}
+
+model Conta {
+  id             Int             @id @default(autoincrement())
+  username       String          @unique
+  password       String
+  codCliente     Int             @unique @default(autoincrement())
+  carteira       Carteira?
+  TransacaoSaldo TransacaoSaldo?
+}
+
+model Carteira {
+  id              Int               @id @default(autoincrement())
+  saldo           Int               @default(0)
+  conta           Conta             @relation(fields: [codCliente], references: [codCliente])
+  codCliente      Int               @unique
+  carteiraAtivo   CarteiraAtivo[]
+  transacaoAtivo  TransacaoAtivo[]    
+}
+
+model CarteiraAtivo {
+  id          Int          @id @default(autoincrement())
+  carteira    Carteira     @relation(fields: [carteiraId], references: [id])
+  carteiraId  Int  
+  ativo       Ativo        @relation(fields: [codAtivo], references: [codAtivo])
+  codAtivo    String          
+}
+
+model Ativo {
+  id              Int       @id @default(autoincrement())     
+  nome            String    
+  codAtivo        String    @unique
+  valorAtivo      Int       
+  qtdDisponivel   Int     
+  carteiraAtivo   CarteiraAtivo[]  
+  transacaoAtivo  TransacaoAtivo[]
+}
+
+model TransacaoAtivo {
+  id             Int        @id @default(autoincrement())
+  ativo          Ativo      @relation(fields: [codAtivo], references: [codAtivo])
+  tipo           String 
+  codAtivo       String     
+  carteira       Carteira   @relation(fields: [carteiraId], references: [id] )
+  carteiraId     Int
+  qtdTransacao   Int        
+  createdAt      DateTime   @default(now())
+}
