@@ -1,34 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ContasService } from './contas.service';
-import { CreateContaDto } from './dto/create-conta.dto';
-import { UpdateContaDto } from './dto/update-conta.dto';
+import { CarteiraEntity } from './entities/carteira.entity';
 
-@Controller('contas')
+@Controller('conta')
+@ApiTags('conta')
 export class ContasController {
   constructor(private readonly contasService: ContasService) {}
 
-  @Post()
-  create(@Body() createContaDto: CreateContaDto) {
-    return this.contasService.create(createContaDto);
+  @Get(':codCliente')
+  async findOne(@Param('codCliente') codCliente: string) {
+    console.log(codCliente);
+    return await this.contasService.findOne(+codCliente);
   }
 
-  @Get()
-  findAll() {
-    return this.contasService.findAll();
+  @Post('deposito')
+  async deposit(@Body() body) {
+    return this.contasService.deposit(body);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contasService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateContaDto: UpdateContaDto) {
-    return this.contasService.update(+id, updateContaDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contasService.remove(+id);
+  @Post('saque')
+  async withdraw(@Body() body) {
+    return await this.contasService.withdraw(body);
   }
 }
