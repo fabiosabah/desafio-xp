@@ -2,7 +2,7 @@
 CREATE TABLE "TransacaoSaldo" (
     "id" SERIAL NOT NULL,
     "codCliente" INTEGER NOT NULL,
-    "valor" DOUBLE PRECISION NOT NULL,
+    "valor" DECIMAL(9,2) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "tipo" TEXT NOT NULL,
 
@@ -22,7 +22,7 @@ CREATE TABLE "Conta" (
 -- CreateTable
 CREATE TABLE "Carteira" (
     "id" SERIAL NOT NULL,
-    "saldo" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "saldo" DECIMAL(9,2) NOT NULL DEFAULT 0,
     "codCliente" INTEGER NOT NULL,
 
     CONSTRAINT "Carteira_pkey" PRIMARY KEY ("id")
@@ -44,7 +44,7 @@ CREATE TABLE "Ativo" (
     "acao" TEXT NOT NULL,
     "codAtivo" TEXT NOT NULL,
     "qtdDisponivel" INTEGER NOT NULL,
-    "valorAtivo" DOUBLE PRECISION NOT NULL,
+    "valorAtivo" DECIMAL(9,2) NOT NULL,
 
     CONSTRAINT "Ativo_pkey" PRIMARY KEY ("id")
 );

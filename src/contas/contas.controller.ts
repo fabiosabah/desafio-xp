@@ -19,7 +19,8 @@ export class ContasController {
   }
 
   @Get(':codCliente')
-  async findOne(@Param('codCliente') codCliente: CodClienteDto) {
-    return await this.contasService.findOne(+codCliente);
+  async findOne(@Param('codCliente') codCliente) {
+    console.log('typeof', typeof codCliente);
+    return await this.contasService.findOne(codCliente);
   }
 }
