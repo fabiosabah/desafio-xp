@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// fazer umas classes para nao escrever isso na mão
+
 async function main() {
   await prisma.conta.upsert({
     where: { email: 'timbersaw@valve.com' },
