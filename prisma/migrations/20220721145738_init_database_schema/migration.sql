@@ -32,7 +32,7 @@ CREATE TABLE "Carteira" (
 CREATE TABLE "CarteiraAtivo" (
     "id" SERIAL NOT NULL,
     "carteiraId" INTEGER NOT NULL,
-    "codAtivo" TEXT NOT NULL,
+    "codAtivo" INTEGER NOT NULL,
     "quantidade" INTEGER NOT NULL,
 
     CONSTRAINT "CarteiraAtivo_pkey" PRIMARY KEY ("id")
@@ -42,7 +42,7 @@ CREATE TABLE "CarteiraAtivo" (
 CREATE TABLE "Ativo" (
     "id" SERIAL NOT NULL,
     "acao" TEXT NOT NULL,
-    "codAtivo" TEXT NOT NULL,
+    "codAtivo" INTEGER NOT NULL,
     "qtdDisponivel" INTEGER NOT NULL,
     "valorAtivo" DECIMAL(9,2) NOT NULL,
 
@@ -53,7 +53,7 @@ CREATE TABLE "Ativo" (
 CREATE TABLE "TransacaoAtivo" (
     "id" SERIAL NOT NULL,
     "tipo" TEXT NOT NULL,
-    "codAtivo" TEXT NOT NULL,
+    "codAtivo" INTEGER NOT NULL,
     "carteiraId" INTEGER NOT NULL,
     "qtdTransacao" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

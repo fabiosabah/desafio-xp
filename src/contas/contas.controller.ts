@@ -8,7 +8,7 @@ import {
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ContasService } from './contas.service';
 import { DepositDto, WithdrawDto } from './dto';
 
