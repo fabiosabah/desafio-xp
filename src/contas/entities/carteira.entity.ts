@@ -4,9 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CarteiraEntity implements Carteira {
   id: number;
 
-  @ApiProperty()
   codCliente: number;
 
-  @ApiProperty()
   saldo: number;
 }

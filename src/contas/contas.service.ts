@@ -10,7 +10,7 @@ import { DepositDto, WithdrawDto } from './dto';
 export class ContasService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(codCliente) {
+  async findOne(codCliente): Promise<any | Error> {
     const cliente = await this.prisma.carteira.findUnique({
       where: { codCliente: +codCliente },
       select: {
@@ -27,29 +27,32 @@ export class ContasService {
     };
   }
 
-  async deposit(depositDto: DepositDto) {
+  async deposit(depositDto: DepositDto): Promise<void | Error> {
     const { CodCliente, Valor } = depositDto;
     const client = await this.findOne(CodCliente);
     await this.prisma.carteira.update({
       where: { codCliente: CodCliente },
+      select: {
+        codCliente: true,
+        saldo: true,
+      },
       data: {
         saldo: client.Saldo + Valor,
       },
     });
-    return 'ok deposito';
   }
-  async withdraw(withdrawDto: WithdrawDto) {
+
+  async withdraw(withdrawDto: WithdrawDto): Promise<void | Error> {
     const { CodCliente, Valor } = withdrawDto;
     const client = await this.findOne(CodCliente);
-    if (client.Saldo - Valor < 0) {
+    if (+client.Saldo - Valor < 0) {
       throw new BadRequestException('Saldo insuficiente');
     }
     await this.prisma.carteira.update({
       where: { codCliente: CodCliente },
       data: {
-        saldo: client.Saldo - Valor,
+        saldo: +client.Saldo - Valor,
       },
     });
-    return 'ok saque';
   }
 }
