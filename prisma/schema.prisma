@@ -42,14 +42,14 @@ model CarteiraAtivo {
   carteira    Carteira     @relation(fields: [carteiraId], references: [id])
   carteiraId  Int  
   ativo       Ativo        @relation(fields: [codAtivo], references: [codAtivo])
-  codAtivo    String          
+  codAtivo    Int          
   quantidade  Int         
 }
 
 model Ativo {
   id              Int       @id @default(autoincrement())     
   acao            String    
-  codAtivo        String    @unique
+  codAtivo        Int    @unique
   qtdDisponivel   Int     
   valorAtivo      Decimal   @db.Decimal(9,2)
   carteiraAtivo   CarteiraAtivo[]  
@@ -60,7 +60,7 @@ model TransacaoAtivo {
   id             Int        @id @default(autoincrement())
   ativo          Ativo      @relation(fields: [codAtivo], references: [codAtivo])
   tipo           String 
-  codAtivo       String     
+  codAtivo       Int     
   carteira       Carteira   @relation(fields: [carteiraId], references: [id] )
   carteiraId     Int
   qtdTransacao   Int        

@@ -113,72 +113,72 @@ async function main() {
   });
 
   await prisma.ativo.upsert({
-    where: { codAtivo: 'CIEL3' },
+    where: { codAtivo: 1 },
     update: {},
     create: {
-      acao: 'CIELO',
-      codAtivo: 'CIEL3',
+      acao: 'CIEL3',
+      codAtivo: 1,
       qtdDisponivel: 1144359228,
       valorAtivo: 4.06,
     },
   });
 
   await prisma.ativo.upsert({
-    where: { codAtivo: 'COGN3' },
+    where: { codAtivo: 2 },
     update: {},
     create: {
-      acao: 'COGNA ON',
-      codAtivo: 'COGN3',
+      acao: 'COGN3',
+      codAtivo: 2,
       qtdDisponivel: 34097800,
       valorAtivo: 2.06,
     },
   });
   await prisma.ativo.upsert({
-    where: { codAtivo: 'RRRP3' },
+    where: { codAtivo: 3 },
     update: {},
     create: {
-      acao: '3R PETROLEUM SA',
-      codAtivo: 'RRRP3',
+      acao: 'RRRP3',
+      codAtivo: 3,
       qtdDisponivel: 1563400,
       valorAtivo: 31.22,
     },
   });
   await prisma.ativo.upsert({
-    where: { codAtivo: 'XP' },
+    where: { codAtivo: 4 },
     update: {},
     create: {
-      acao: 'XP INC',
-      codAtivo: 'XP',
+      acao: 'XP',
+      codAtivo: 4,
       qtdDisponivel: 1042797,
       valorAtivo: 18.06,
     },
   });
   await prisma.ativo.upsert({
-    where: { codAtivo: 'BRKM5' },
+    where: { codAtivo: 5 },
     update: {},
     create: {
-      acao: 'Braskem',
-      codAtivo: 'BRKM5',
+      acao: 'BRKM5',
+      codAtivo: 5,
       qtdDisponivel: 579600,
       valorAtivo: 34.11,
     },
   });
   await prisma.ativo.upsert({
-    where: { codAtivo: 'ALPA4' },
+    where: { codAtivo: 6 },
     update: {},
     create: {
-      acao: 'Alpargatas SA',
-      codAtivo: 'ALPA4',
+      acao: 'ALPA4',
+      codAtivo: 6,
       qtdDisponivel: 2348200,
       valorAtivo: 21.46,
     },
   });
   await prisma.ativo.upsert({
-    where: { codAtivo: 'ABEV3' },
+    where: { codAtivo: 7 },
     update: {},
     create: {
-      acao: 'Ambev SA',
-      codAtivo: 'ABEV3',
+      acao: 'ABEV3',
+      codAtivo: 7,
       qtdDisponivel: 18915200,
       valorAtivo: 14.23,
     },
@@ -190,7 +190,7 @@ async function main() {
     update: {},
     create: {
       carteiraId: 1,
-      codAtivo: 'BRKM5',
+      codAtivo: 5,
       quantidade: 124,
     },
   });
@@ -200,7 +200,7 @@ async function main() {
     update: {},
     create: {
       carteiraId: 1,
-      codAtivo: 'ABEV3',
+      codAtivo: 7,
       quantidade: 500,
     },
   });
@@ -210,7 +210,7 @@ async function main() {
     update: {},
     create: {
       carteiraId: 2,
-      codAtivo: 'ALPA4',
+      codAtivo: 6,
       quantidade: 50,
     },
   });
@@ -220,7 +220,7 @@ async function main() {
     update: {},
     create: {
       carteiraId: 2,
-      codAtivo: 'XP',
+      codAtivo: 4,
       quantidade: 150,
     },
   });
@@ -230,7 +230,7 @@ async function main() {
     update: {},
     create: {
       carteiraId: 3,
-      codAtivo: 'XP',
+      codAtivo: 4,
       quantidade: 550,
     },
   });
@@ -240,7 +240,7 @@ async function main() {
     update: {},
     create: {
       carteiraId: 3,
-      codAtivo: 'ALPA4',
+      codAtivo: 6,
       quantidade: 20,
     },
   });
@@ -250,7 +250,7 @@ async function main() {
     update: {},
     create: {
       carteiraId: 5,
-      codAtivo: 'COGN3',
+      codAtivo: 3,
       quantidade: 12,
     },
   });
@@ -260,7 +260,7 @@ async function main() {
     update: {},
     create: {
       carteiraId: 5,
-      codAtivo: 'BRKM5',
+      codAtivo: 5,
       quantidade: 100,
     },
   });
