@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { DepositDto, WithdrawDto } from './dto';
 
 @Injectable()
 export class ContasService {
@@ -11,7 +12,7 @@ export class ContasService {
 
   async findOne(codCliente) {
     const cliente = await this.prisma.carteira.findUnique({
-      where: { codCliente: parseFloat(codCliente) },
+      where: { codCliente: +codCliente },
       select: {
         codCliente: true,
         saldo: true,
@@ -22,32 +23,33 @@ export class ContasService {
     }
     return {
       CodCliente: cliente.codCliente,
-      Saldo: cliente.saldo,
+      Saldo: +cliente.saldo,
     };
   }
 
-  async deposit(depositDto) {
-    //   const { codCliente, Valor } = depositDto;
-    //   const client = await this.findOne(codCliente);
-    //   console.log('-----------', client);
-    //   // return await this.prisma.carteira.update({
-    //   //   where: { codCliente: codCliente },
-    //   //   data: {
-    //   //     saldo: client.Saldo + Valor,
-    //   //   },
-    // });
+  async deposit(depositDto: DepositDto) {
+    const { CodCliente, Valor } = depositDto;
+    const client = await this.findOne(CodCliente);
+    await this.prisma.carteira.update({
+      where: { codCliente: CodCliente },
+      data: {
+        saldo: client.Saldo + Valor,
+      },
+    });
+    return 'ok deposito';
   }
-  async withdraw(withdrawDto) {}
-  // const { codCliente, Valor } = withdrawDto;
-  // const client = await this.findOne(codCliente);
-  // if (client.Saldo - Valor < 0)
-  //   throw new BadRequestException('Saldo insuficiente');
-
-  // return await this.prisma.carteira.update({
-  //   where: { codCliente },
-  //   data: {
-  //     saldo: client.Saldo - Valor,
-  // },
-  // });
-  // }
+  async withdraw(withdrawDto: WithdrawDto) {
+    const { CodCliente, Valor } = withdrawDto;
+    const client = await this.findOne(CodCliente);
+    if (client.Saldo - Valor < 0) {
+      throw new BadRequestException('Saldo insuficiente');
+    }
+    await this.prisma.carteira.update({
+      where: { codCliente: CodCliente },
+      data: {
+        saldo: client.Saldo - Valor,
+      },
+    });
+    return 'ok saque';
+  }
 }

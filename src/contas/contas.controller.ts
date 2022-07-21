@@ -1,7 +1,14 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ContasService } from './contas.service';
-import { DepositDto, WithdrawDto, CodClienteDto } from './dto';
+import { DepositDto, WithdrawDto } from './dto';
 
 @Controller('conta')
 @ApiTags('conta')
@@ -10,7 +17,7 @@ export class ContasController {
 
   @Post('deposito')
   async deposit(@Body() depositDto: DepositDto) {
-    return this.contasService.deposit(depositDto);
+    return await this.contasService.deposit(depositDto);
   }
 
   @Post('saque')
@@ -18,9 +25,10 @@ export class ContasController {
     return await this.contasService.withdraw(withdrawDto);
   }
 
-  @Get(':codCliente')
-  async findOne(@Param('codCliente') codCliente) {
-    console.log('typeof', typeof codCliente);
-    return await this.contasService.findOne(codCliente);
+  @Get(':cod')
+  async findOne(@Param('cod', ParseIntPipe) cod: number) {
+    console.log('oii');
+    console.log('typeof', typeof cod);
+    return await this.contasService.findOne(cod);
   }
 }
