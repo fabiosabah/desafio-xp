@@ -10,9 +10,9 @@ import { DepositDto, WithdrawDto } from './dto';
 export class ContasService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(codCliente): Promise<any | Error> {
+  async findOne(codCliente: number): Promise<any | Error> {
     const cliente = await this.prisma.carteira.findUnique({
-      where: { codCliente: +codCliente },
+      where: { codCliente },
       select: {
         codCliente: true,
         saldo: true,
