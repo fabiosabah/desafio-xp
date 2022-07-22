@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DepositDto, WithdrawDto } from './dto';
+import { CarteiraEntity } from './entities/carteira.entity';
 
 @Injectable()
 export class ContasService {
@@ -18,7 +19,7 @@ export class ContasService {
     };
   }
 
-  async findWallet(codCliente) {
+  async findWallet(codCliente): Promise<CarteiraEntity> {
     const cliente = await this.prisma.carteira.findUnique({
       where: { codCliente },
     });

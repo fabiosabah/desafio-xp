@@ -1,10 +1,9 @@
-import { Carteira, Prisma } from '@prisma/client';
-import { ApiProperty } from '@nestjs/swagger';
+import { Carteira } from '@prisma/client';
 
 export class CarteiraEntity implements Carteira {
   id: number;
 
   codCliente: number;
 
-  saldo: number | any; //Prisma.Decimal force any usage
+  saldo: any; //Prisma.Decimal force any usage
 }

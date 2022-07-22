@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { InvestimentosDto } from './dto/investimentos.dto';
 import { InvestimentosService } from './investimentos.service';
 
@@ -7,12 +7,16 @@ export class InvestimentosController {
   constructor(private readonly investimentosService: InvestimentosService) {}
 
   @Post('comprar')
-  async buy(@Body() investimentosDto: InvestimentosDto) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async buy(@Body() investimentosDto: InvestimentosDto): Promise<void | Error> {
     return this.investimentosService.buy(investimentosDto);
   }
 
   @Post('vender')
-  async sell(@Body() investimentosDto: InvestimentosDto) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async sell(
+    @Body() investimentosDto: InvestimentosDto,
+  ): Promise<void | Error> {
     return this.investimentosService.sell(investimentosDto);
   }
 }
