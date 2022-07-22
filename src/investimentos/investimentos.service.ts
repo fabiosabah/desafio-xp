@@ -13,21 +13,26 @@ export class InvestimentosService {
 
   async buy(body) {
     const { codCliente, codAtivo, qtdeAtivo } = body;
-    await this.contas.findOne(codCliente);
+    const wallet = await this.contas.findWallet(codCliente);
     const ativo = await this.ativos.findOne(codAtivo);
     if (qtdeAtivo > ativo.QtdeAtivo)
       throw new BadRequestException(
         'A Quantidade de ativo a ser vendida não pode ser maior que a quantidade disponível na carteira',
       );
-    const { id } = await this.prisma.carteira.findFirst({
-      where: { codCliente },
-    });
-    await this.prisma.ativo.update({
-      where: { codAtivo },
-      data: { qtdDisponivel: ativo.QtdeAtivo - qtdeAtivo },
-    });
 
-    return ativo;
+    // const data = await this.prisma.$transaction([
+    //   this.prisma.ativo.update({
+    //     where: { codAtivo },
+    //     data: { qtdDisponivel: ativo.QtdeAtivo - qtdeAtivo },
+    //   }),
+    //   this.prisma.carteiraAtivo.upsert({
+    //     where: { carteiraId_codAtivo: { carteiraId: id, codAtivo } },
+    //     update: { carteiraId: id, codAtivo, quantidade: qtdeAtivo },
+    //     create: { carteiraId: id, codAtivo, quantidade: qtdeAtivo },
+    //   }),
+    // ]);
+
+    return wallet;
   }
 
   async sell(body) {}

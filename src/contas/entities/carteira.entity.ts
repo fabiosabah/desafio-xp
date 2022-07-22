@@ -6,5 +6,5 @@ export class CarteiraEntity implements Carteira {
 
   codCliente: number;
 
-  saldo: number;
+  saldo: number | any; //Prisma.Decimal force any usage
 }

@@ -11,20 +11,21 @@ export class ContasService {
   constructor(private prisma: PrismaService) {}
 
   async findOne(codCliente: number): Promise<any | Error> {
-    const cliente = await this.prisma.carteira.findUnique({
-      where: { codCliente },
-      select: {
-        codCliente: true,
-        saldo: true,
-      },
-    });
-    if (!cliente) {
-      throw new NotFoundException(`Cliente #${codCliente} não encontrado`);
-    }
+    const cliente = await this.findWallet(codCliente);
     return {
       CodCliente: cliente.codCliente,
       Saldo: +cliente.saldo,
     };
+  }
+
+  async findWallet(codCliente) {
+    const cliente = await this.prisma.carteira.findUnique({
+      where: { codCliente },
+    });
+    if (!cliente) {
+      throw new NotFoundException(`Cliente #${codCliente} não encontrado`);
+    }
+    return cliente;
   }
 
   async deposit(depositDto: DepositDto): Promise<void | Error> {
