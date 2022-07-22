@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { AtivosService } from 'src/ativos/ativos.service';
 import { ContasService } from 'src/contas/contas.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -11,28 +15,43 @@ export class InvestimentosService {
     private contas: ContasService,
   ) {}
 
-  async buy(body) {
+  async buy(body): Promise<void | Error> {
     const { codCliente, codAtivo, qtdeAtivo } = body;
-    const wallet = await this.contas.findWallet(codCliente);
+    const { id } = await this.contas.findWallet(codCliente);
     const ativo = await this.ativos.findOne(codAtivo);
+
     if (qtdeAtivo > ativo.QtdeAtivo)
       throw new BadRequestException(
-        'A Quantidade de ativo a ser vendida não pode ser maior que a quantidade disponível na carteira',
+        'The amount of asset to be sold cannot be greater than the amount available in the portfolio.',
       );
-
-    // const data = await this.prisma.$transaction([
-    //   this.prisma.ativo.update({
-    //     where: { codAtivo },
-    //     data: { qtdDisponivel: ativo.QtdeAtivo - qtdeAtivo },
-    //   }),
-    //   this.prisma.carteiraAtivo.upsert({
-    //     where: { carteiraId_codAtivo: { carteiraId: id, codAtivo } },
-    //     update: { carteiraId: id, codAtivo, quantidade: qtdeAtivo },
-    //     create: { carteiraId: id, codAtivo, quantidade: qtdeAtivo },
-    //   }),
-    // ]);
-
-    return wallet;
+    const { quantidade } = await this.prisma.carteiraAtivo.findFirst({
+      where: { carteiraId: id, codAtivo: ativo.CodAtivo },
+    });
+    try {
+      await this.prisma.$transaction([
+        this.prisma.ativo.update({
+          where: { codAtivo },
+          data: { qtdDisponivel: ativo.QtdeAtivo - qtdeAtivo },
+        }),
+        this.prisma.carteiraAtivo.upsert({
+          where: { carteiraId_codAtivo: { carteiraId: id, codAtivo } },
+          update: {
+            carteiraId: id,
+            codAtivo,
+            quantidade: qtdeAtivo + quantidade,
+          },
+          create: {
+            carteiraId: id,
+            codAtivo,
+            quantidade: qtdeAtivo + quantidade,
+          },
+        }),
+      ]);
+    } catch (err) {
+      throw new UnprocessableEntityException(
+        'An operation failed because it depends on one or more records that were required',
+      );
+    }
   }
 
   async sell(body) {}
