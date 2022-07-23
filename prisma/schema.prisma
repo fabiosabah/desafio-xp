@@ -43,7 +43,9 @@ model CarteiraAtivo {
   carteiraId  Int  
   ativo       Ativo        @relation(fields: [codAtivo], references: [codAtivo])
   codAtivo    Int          
-  quantidade  Int         
+  quantidade  Int
+
+  @@unique([carteiraId, codAtivo])         
 }
 
 model Ativo {

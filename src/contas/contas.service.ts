@@ -5,26 +5,28 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DepositDto, WithdrawDto } from './dto';
+import { CarteiraEntity } from './entities/carteira.entity';
 
 @Injectable()
 export class ContasService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(codCliente): Promise<any | Error> {
-    const cliente = await this.prisma.carteira.findUnique({
-      where: { codCliente: +codCliente },
-      select: {
-        codCliente: true,
-        saldo: true,
-      },
-    });
-    if (!cliente) {
-      throw new NotFoundException(`Cliente #${codCliente} não encontrado`);
-    }
+  async findOne(codCliente: number): Promise<any | Error> {
+    const cliente = await this.findWallet(codCliente);
     return {
       CodCliente: cliente.codCliente,
       Saldo: +cliente.saldo,
     };
+  }
+
+  async findWallet(codCliente): Promise<CarteiraEntity> {
+    const cliente = await this.prisma.carteira.findUnique({
+      where: { codCliente },
+    });
+    if (!cliente) {
+      throw new NotFoundException(`Cliente #${codCliente} não encontrado`);
+    }
+    return cliente;
   }
 
   async deposit(depositDto: DepositDto): Promise<void | Error> {
