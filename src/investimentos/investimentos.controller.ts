@@ -13,10 +13,8 @@ export class InvestimentosController {
   }
 
   @Post('vender')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async sell(
-    @Body() investimentosDto: InvestimentosDto,
-  ): Promise<void | Error> {
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  async sell(@Body() investimentosDto: InvestimentosDto) {
     return this.investimentosService.sell(investimentosDto);
   }
 }

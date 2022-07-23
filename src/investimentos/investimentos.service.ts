@@ -77,6 +77,63 @@ export class InvestimentosService {
     }
   }
 
-  async sell(investimentosDto: InvestimentosDto): Promise<void | Error> {
+  async sell(investimentosDto: InvestimentosDto) {
+    const { codCliente, codAtivo, qtdeAtivo } = investimentosDto;
+    const { quantidade: qtdAtual, carteiraId } =
+      await this.prisma.carteiraAtivo.findFirst({
+        where: {
+          codAtivo,
+          carteira: {
+            codCliente,
+          },
+        },
+      });
+    if (!qtdAtual || qtdAtual < qtdeAtivo) {
+      throw new BadRequestException(
+        'Portfolio does not have this amount of assets',
+      );
+    }
+    const { QtdeAtivo: totalAssets, Valor } = await this.ativos.findOne(
+      codAtivo,
+    );
+    const { saldo: balance } = await this.contas.findWallet(codCliente);
+    const qtdDisponivel = qtdeAtivo + totalAssets;
+    const quantidade = qtdAtual - qtdeAtivo;
+    const valueTransaction = Valor * qtdeAtivo;
+    const saldo = +balance + valueTransaction;
+
+    try {
+      await this.prisma.$transaction([
+        this.prisma.carteiraAtivo.update({
+          where: {
+            carteiraId_codAtivo: {
+              carteiraId,
+              codAtivo,
+            },
+          },
+          data: { quantidade },
+        }),
+        this.prisma.ativo.update({
+          where: {
+            codAtivo,
+          },
+          data: { qtdDisponivel },
+        }),
+        this.prisma.carteira.update({
+          where: { codCliente },
+          data: { saldo },
+        }),
+        this.prisma.transacaoAtivo.create({
+          data: {
+            tipo: 'VENDA',
+            codAtivo,
+            carteiraId,
+            qtdTransacao: qtdeAtivo,
+          },
+        }),
+      ]);
+    } catch (error) {
+      throw new UnprocessableEntityException('Transaction operation failed');
+    }
   }
 }

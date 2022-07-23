@@ -40,4 +40,15 @@ export class AtivosService {
 
     return response;
   }
+
+  async findCarteiraAtivo(carteiraId, codAtivo) {
+    return await this.prisma.carteiraAtivo.findUnique({
+      where: {
+        carteiraId_codAtivo: {
+          carteiraId,
+          codAtivo,
+        },
+      },
+    });
+  }
 }
