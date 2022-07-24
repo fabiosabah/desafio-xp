@@ -31,21 +31,10 @@ export class ContasService {
   }
 
   async deposit(depositDto: DepositDto): Promise<any | void | Error> {
-    const { CodCliente, Valor } = depositDto;
+    const { CodCliente } = depositDto;
+    const valor = depositDto.Valor * 100;
     console.log(typeof CodCliente);
     const client = await this.findOne(CodCliente);
-    const result = await this.prisma.carteira.update({
-      where: { codCliente: CodCliente },
-      select: {
-        codCliente: true,
-        saldo: true,
-      },
-      data: {
-        saldo: client.Saldo + Valor,
-      },
-    });
-    console.log(result);
-    return result;
     try {
       await this.prisma.carteira.update({
         where: { codCliente: CodCliente },
@@ -54,7 +43,7 @@ export class ContasService {
           saldo: true,
         },
         data: {
-          saldo: client.Saldo + Valor,
+          saldo: client.Saldo + valor,
         },
       });
     } catch (er) {
