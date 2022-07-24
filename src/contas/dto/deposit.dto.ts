@@ -3,7 +3,7 @@ import { IsNumber, Min } from 'class-validator';
 
 export class DepositDto {
   @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0.1)
+  @Min(1)
   @ApiProperty()
   readonly CodCliente: number;
 

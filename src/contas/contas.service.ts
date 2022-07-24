@@ -30,9 +30,22 @@ export class ContasService {
     return cliente;
   }
 
-  async deposit(depositDto: DepositDto): Promise<void | Error> {
+  async deposit(depositDto: DepositDto): Promise<any | void | Error> {
     const { CodCliente, Valor } = depositDto;
+    console.log(typeof CodCliente);
     const client = await this.findOne(CodCliente);
+    const result = await this.prisma.carteira.update({
+      where: { codCliente: CodCliente },
+      select: {
+        codCliente: true,
+        saldo: true,
+      },
+      data: {
+        saldo: client.Saldo + Valor,
+      },
+    });
+    console.log(result);
+    return result;
     try {
       await this.prisma.carteira.update({
         where: { codCliente: CodCliente },

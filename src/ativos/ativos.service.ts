@@ -77,8 +77,3 @@ export class AtivosService {
     });
   }
 }
-
-// }).map((d) => {
-//  const author = await prisma.author.findFirst({where: {id: d.authorId}});
-//  return {...d, author}
-// });
