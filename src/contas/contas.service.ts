@@ -14,9 +14,10 @@ export class ContasService {
 
   async findOne(codCliente: number): Promise<any | Error> {
     const cliente = await this.findWallet(codCliente);
+    cliente.saldo = cliente.saldo / 100;
     return {
       CodCliente: cliente.codCliente,
-      Saldo: +cliente.saldo,
+      Saldo: cliente.saldo,
     };
   }
 
@@ -33,7 +34,6 @@ export class ContasService {
   async deposit(depositDto: DepositDto): Promise<any | void | Error> {
     const { CodCliente } = depositDto;
     const valor = depositDto.Valor * 100;
-    console.log(typeof CodCliente);
     const client = await this.findOne(CodCliente);
     try {
       await this.prisma.carteira.update({
@@ -52,16 +52,18 @@ export class ContasService {
   }
 
   async withdraw(withdrawDto: WithdrawDto): Promise<void | Error> {
-    const { CodCliente, Valor } = withdrawDto;
+    const { CodCliente } = withdrawDto;
+    const valor = withdrawDto.Valor * 100;
     const client = await this.findOne(CodCliente);
-    if (+client.Saldo - Valor < 0) {
+    console.log(client);
+    if (client.Saldo - valor < 0) {
       throw new BadRequestException('Saldo insuficiente');
     }
     try {
       await this.prisma.carteira.update({
         where: { codCliente: CodCliente },
         data: {
-          saldo: +client.Saldo - Valor,
+          saldo: client.Saldo - valor,
         },
       });
     } catch (err) {

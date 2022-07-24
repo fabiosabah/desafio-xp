@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, Min } from 'class-validator';
+import { IsNumber, Min, Max } from 'class-validator';
 
 export class DepositDto {
   @IsNumber({ maxDecimalPlaces: 2 })
@@ -9,6 +9,7 @@ export class DepositDto {
 
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0.1)
+  @Max(20_000_000)
   @ApiProperty()
   readonly Valor: number;
 }
