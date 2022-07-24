@@ -27,7 +27,7 @@ export class InvestimentosService {
         'The amount of asset to be sold cannot be greater than the amount available in the portfolio.',
       );
 
-    const purchaseAmount = ativo.Valor * qtdeAtivo;
+    const purchaseAmount = ativo.Valor * qtdeAtivo * 100;
 
     if (purchaseAmount > saldo) {
       throw new BadRequestException(
@@ -47,8 +47,8 @@ export class InvestimentosService {
 
     const qtdUpsert = qtdeAtivo + quantidade;
     const queryAtivo = queryQtdAtivo(codAtivo, ativo, qtdeAtivo);
-    const queryCarteiraAtivo = queryUpsert(carteiraId, codAtivo, qtdUpsert);
     const queryCarteira = queryBalance(carteiraId, saldo, purchaseAmount);
+    const queryCarteiraAtivo = queryUpsert(carteiraId, codAtivo, qtdUpsert);
     const queryTransacao = queryLog(codAtivo, carteiraId, qtdeAtivo);
 
     await this.buyTransactions(
@@ -77,17 +77,22 @@ export class InvestimentosService {
     }
   }
 
-  async sell(investimentosDto: InvestimentosDto): Promise<void | Error> {
+  async sell(investimentosDto: InvestimentosDto): Promise<any | void | Error> {
     const { codCliente, codAtivo, qtdeAtivo } = investimentosDto;
-    const { quantidade: qtdAtual, carteiraId } =
-      await this.prisma.carteiraAtivo.findFirst({
-        where: {
-          codAtivo,
-          carteira: {
-            codCliente,
-          },
+    const carteiraAtivo = await this.prisma.carteiraAtivo.findFirst({
+      where: {
+        codAtivo,
+        carteira: {
+          codCliente,
         },
-      });
+      },
+    });
+    const carteiraId = carteiraAtivo?.carteiraId;
+    const qtdAtual = carteiraAtivo?.quantidade;
+    if (!qtdAtual) {
+      throw new BadRequestException('Portfolio does not have this asset');
+    }
+
     if (!qtdAtual || qtdAtual < qtdeAtivo) {
       throw new BadRequestException(
         'Portfolio does not have this amount of assets',
@@ -99,8 +104,8 @@ export class InvestimentosService {
     const { saldo: balance } = await this.contas.findWallet(codCliente);
     const qtdDisponivel = qtdeAtivo + totalAssets;
     const quantidade = qtdAtual - qtdeAtivo;
-    const valueTransaction = Valor * qtdeAtivo;
-    const saldo = +balance + valueTransaction;
+    const valueTransaction = Valor * qtdeAtivo * 100;
+    const saldo = balance + valueTransaction;
 
     try {
       await this.prisma.$transaction([

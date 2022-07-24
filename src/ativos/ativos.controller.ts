@@ -5,17 +5,16 @@ import { AtivosService } from './ativos.service';
 export class AtivosController {
   constructor(private readonly ativosService: AtivosService) {}
 
-  @Get(':cod')
+  @Get('/:cod')
   async findOne(@Param('cod', ParseIntPipe) cod) {
     return await this.ativosService.findOne(cod);
   }
 
-  @Get('cliente/:cod')
+  @Get('/cliente/:cod')
   async findAll(@Param('cod', ParseIntPipe) cod) {
     return await this.ativosService.findAll(cod);
   }
-
-  @Get('/todos')
+  @Get()
   async groupAtivos() {
     return await this.ativosService.groupAtivos();
   }

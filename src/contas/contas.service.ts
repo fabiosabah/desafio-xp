@@ -12,9 +12,11 @@ import { CarteiraEntity } from './entities/carteira.entity';
 export class ContasService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(codCliente: number): Promise<any | Error> {
+  async findOne(codCliente: number, decimal = false): Promise<any | Error> {
     const cliente = await this.findWallet(codCliente);
-    cliente.saldo = cliente.saldo / 100;
+    if (decimal) {
+      cliente.saldo = cliente.saldo / 100;
+    }
     return {
       CodCliente: cliente.codCliente,
       Saldo: cliente.saldo,

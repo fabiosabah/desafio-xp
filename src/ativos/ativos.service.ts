@@ -16,7 +16,7 @@ export class AtivosService {
     const response = {
       CodAtivo: ativo.codAtivo,
       QtdeAtivo: ativo.qtdDisponivel,
-      Valor: +ativo.valorAtivo,
+      Valor: ativo.valorAtivo / 100,
     };
     return response;
   }
@@ -36,7 +36,7 @@ export class AtivosService {
         CodCliente: ativo.carteira.codCliente,
         CodAtivo: ativo.codAtivo,
         QtdAtivo: ativo.quantidade,
-        Valor: +ativo.ativo.valorAtivo,
+        Valor: ativo.ativo.valorAtivo / 100,
       }))
       .filter((item) => item.QtdAtivo != 0);
     return response;
@@ -63,7 +63,7 @@ export class AtivosService {
         CodAtivo: item.codAtivo,
         QtdeDisponivel: item.qtdDisponivel,
         QtdInvestida: QtdInvestida?._sum.quantidade || 0,
-        Valor: +item.valorAtivo,
+        Valor: item.valorAtivo / 100,
       };
     });
   }
