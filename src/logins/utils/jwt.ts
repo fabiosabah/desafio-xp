@@ -1,4 +1,4 @@
-import { sign, verify } from 'jsonwebtoken';
+import { sign } from 'jsonwebtoken';
 
 export function generateJwt(contaEntity) {
   return sign(
@@ -10,8 +10,4 @@ export function generateJwt(contaEntity) {
     'token_secret',
     { expiresIn: '24h', algorithm: 'HS256' },
   );
-}
-
-export function decoded(token) {
-  return verify(token, 'token_secret');
 }

@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
+import { ExpressRequest } from 'src/types/expressRequest.interface';
 import { LoginDto } from './dto/login.dto';
 import { LoginsService } from './logins.service';
 
@@ -6,7 +7,8 @@ import { LoginsService } from './logins.service';
 export class LoginsController {
   constructor(private readonly loginsService: LoginsService) {}
   @Post('login')
-  async login(@Body() loginDto): Promise<any> {
+  async login(@Body() loginDto, @Req() req: ExpressRequest): Promise<any> {
+    console.log(req.cliente);
     return this.loginsService.login(loginDto);
   }
 }
