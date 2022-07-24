@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DepositDto, WithdrawDto } from './dto';
@@ -32,16 +33,20 @@ export class ContasService {
   async deposit(depositDto: DepositDto): Promise<void | Error> {
     const { CodCliente, Valor } = depositDto;
     const client = await this.findOne(CodCliente);
-    await this.prisma.carteira.update({
-      where: { codCliente: CodCliente },
-      select: {
-        codCliente: true,
-        saldo: true,
-      },
-      data: {
-        saldo: client.Saldo + Valor,
-      },
-    });
+    try {
+      await this.prisma.carteira.update({
+        where: { codCliente: CodCliente },
+        select: {
+          codCliente: true,
+          saldo: true,
+        },
+        data: {
+          saldo: client.Saldo + Valor,
+        },
+      });
+    } catch (er) {
+      throw new UnprocessableEntityException('Transaction operation failed');
+    }
   }
 
   async withdraw(withdrawDto: WithdrawDto): Promise<void | Error> {
@@ -50,11 +55,15 @@ export class ContasService {
     if (+client.Saldo - Valor < 0) {
       throw new BadRequestException('Saldo insuficiente');
     }
-    await this.prisma.carteira.update({
-      where: { codCliente: CodCliente },
-      data: {
-        saldo: +client.Saldo - Valor,
-      },
-    });
+    try {
+      await this.prisma.carteira.update({
+        where: { codCliente: CodCliente },
+        data: {
+          saldo: +client.Saldo - Valor,
+        },
+      });
+    } catch (err) {
+      throw new UnprocessableEntityException('Transaction operation failed');
+    }
   }
 }

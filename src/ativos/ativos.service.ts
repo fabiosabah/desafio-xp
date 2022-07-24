@@ -31,13 +31,14 @@ export class AtivosService {
         ativo: true,
       },
     });
-    const response = ativos.map((ativo) => ({
-      CodCliente: ativo.carteira.codCliente,
-      CodAtivo: ativo.codAtivo,
-      QtdAtivo: ativo.quantidade,
-      Valor: +ativo.ativo.valorAtivo,
-    }));
-
+    const response = ativos
+      .map((ativo) => ({
+        CodCliente: ativo.carteira.codCliente,
+        CodAtivo: ativo.codAtivo,
+        QtdAtivo: ativo.quantidade,
+        Valor: +ativo.ativo.valorAtivo,
+      }))
+      .filter((item) => item.QtdAtivo != 0);
     return response;
   }
 
@@ -51,4 +52,33 @@ export class AtivosService {
       },
     });
   }
+
+  async groupAtivos() {
+    const ativos = await this.prisma.ativo.findMany();
+    const groupQtd = await this.groupQtd();
+    return ativos.map((item) => {
+      const QtdInvestida = groupQtd.find((i) => i.codAtivo === item.codAtivo);
+      return {
+        Acao: item.acao,
+        CodAtivo: item.codAtivo,
+        QtdeDisponivel: item.qtdDisponivel,
+        QtdInvestida: QtdInvestida?._sum.quantidade || 0,
+        Valor: +item.valorAtivo,
+      };
+    });
+  }
+
+  async groupQtd() {
+    return await this.prisma.carteiraAtivo.groupBy({
+      by: ['codAtivo'],
+      _sum: {
+        quantidade: true,
+      },
+    });
+  }
 }
+
+// }).map((d) => {
+//  const author = await prisma.author.findFirst({where: {id: d.authorId}});
+//  return {...d, author}
+// });
