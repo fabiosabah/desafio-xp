@@ -20,7 +20,7 @@ export class ContasService {
     };
   }
 
-  async findWallet(codCliente): Promise<CarteiraEntity> {
+  async findWallet(codCliente: number): Promise<CarteiraEntity> {
     const cliente = await this.prisma.carteira.findUnique({
       where: { codCliente },
     });
