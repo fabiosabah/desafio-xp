@@ -63,7 +63,7 @@ async function main() {
     update: {},
     create: {
       codCliente: 1,
-      saldo: 2000.0,
+      saldo: 200060,
     },
   });
 
@@ -72,7 +72,7 @@ async function main() {
     update: {},
     create: {
       codCliente: 2,
-      saldo: 600.0,
+      saldo: 60060,
     },
   });
 
@@ -81,7 +81,7 @@ async function main() {
     update: {},
     create: {
       codCliente: 3,
-      saldo: 7000.0,
+      saldo: 700050,
     },
   });
 
@@ -90,7 +90,7 @@ async function main() {
     update: {},
     create: {
       codCliente: 4,
-      saldo: 622.42,
+      saldo: 62242,
     },
   });
 
@@ -99,7 +99,7 @@ async function main() {
     update: {},
     create: {
       codCliente: 5,
-      saldo: 5000.0,
+      saldo: 500000,
     },
   });
 
@@ -108,7 +108,7 @@ async function main() {
     update: {},
     create: {
       codCliente: 6,
-      saldo: 2174.25,
+      saldo: 217425,
     },
   });
 
@@ -119,7 +119,7 @@ async function main() {
       acao: 'CIEL3',
       codAtivo: 1,
       qtdDisponivel: 1144359228,
-      valorAtivo: 4.06,
+      valorAtivo: 406,
     },
   });
 
@@ -130,7 +130,7 @@ async function main() {
       acao: 'COGN3',
       codAtivo: 2,
       qtdDisponivel: 34097800,
-      valorAtivo: 2.06,
+      valorAtivo: 206,
     },
   });
   await prisma.ativo.upsert({
@@ -140,7 +140,7 @@ async function main() {
       acao: 'RRRP3',
       codAtivo: 3,
       qtdDisponivel: 1563400,
-      valorAtivo: 31.22,
+      valorAtivo: 3122,
     },
   });
   await prisma.ativo.upsert({
@@ -150,7 +150,7 @@ async function main() {
       acao: 'XP',
       codAtivo: 4,
       qtdDisponivel: 1042797,
-      valorAtivo: 18.06,
+      valorAtivo: 1806,
     },
   });
   await prisma.ativo.upsert({
@@ -160,7 +160,7 @@ async function main() {
       acao: 'BRKM5',
       codAtivo: 5,
       qtdDisponivel: 579600,
-      valorAtivo: 34.11,
+      valorAtivo: 3411,
     },
   });
   await prisma.ativo.upsert({
@@ -170,7 +170,7 @@ async function main() {
       acao: 'ALPA4',
       codAtivo: 6,
       qtdDisponivel: 2348200,
-      valorAtivo: 21.46,
+      valorAtivo: 2146,
     },
   });
   await prisma.ativo.upsert({
@@ -180,7 +180,7 @@ async function main() {
       acao: 'ABEV3',
       codAtivo: 7,
       qtdDisponivel: 18915200,
-      valorAtivo: 14.23,
+      valorAtivo: 1423,
     },
   });
   // carteira ativo

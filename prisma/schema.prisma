@@ -14,7 +14,7 @@ model TransacaoSaldo {
   id         Int      @id @default(autoincrement())
   conta      Conta    @relation(fields: [codCliente], references: [codCliente])
   codCliente Int      @unique
-  valor      Decimal  @db.Decimal(9,2)
+  valor      Int
   createdAt  DateTime @default(now())
   tipo       String
 }
@@ -30,7 +30,7 @@ model Conta {
 
 model Carteira {
   id              Int               @id @default(autoincrement())
-  saldo           Decimal           @db.Decimal(9,2) @default(0)
+  saldo           Int               @default(0)
   conta           Conta             @relation(fields: [codCliente], references: [codCliente])
   codCliente      Int               @unique
   carteiraAtivo   CarteiraAtivo[]
@@ -53,7 +53,7 @@ model Ativo {
   acao            String    
   codAtivo        Int    @unique
   qtdDisponivel   Int     
-  valorAtivo      Decimal   @db.Decimal(9,2)
+  valorAtivo      Int
   carteiraAtivo   CarteiraAtivo[]  
   transacaoAtivo  TransacaoAtivo[]
 }

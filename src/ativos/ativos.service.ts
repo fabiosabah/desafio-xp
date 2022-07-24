@@ -6,18 +6,19 @@ import { NotFoundException } from '@nestjs/common';
 export class AtivosService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(codAtivo) {
+  async findOne(codAtivo, decimal = false) {
     const ativo = await this.prisma.ativo.findFirst({
       where: { codAtivo },
     });
     if (!ativo) {
-      throw new NotFoundException(`Ativo #${codAtivo} não encontrado`);
+      throw new NotFoundException(`Asset #${codAtivo} not found`);
     }
     const response = {
       CodAtivo: ativo.codAtivo,
       QtdeAtivo: ativo.qtdDisponivel,
-      Valor: +ativo.valorAtivo,
+      Valor: decimal ? ativo.valorAtivo / 100 : ativo.valorAtivo,
     };
+
     return response;
   }
 
@@ -36,7 +37,7 @@ export class AtivosService {
         CodCliente: ativo.carteira.codCliente,
         CodAtivo: ativo.codAtivo,
         QtdAtivo: ativo.quantidade,
-        Valor: +ativo.ativo.valorAtivo,
+        Valor: ativo.ativo.valorAtivo / 100,
       }))
       .filter((item) => item.QtdAtivo != 0);
     return response;
@@ -63,7 +64,7 @@ export class AtivosService {
         CodAtivo: item.codAtivo,
         QtdeDisponivel: item.qtdDisponivel,
         QtdInvestida: QtdInvestida?._sum.quantidade || 0,
-        Valor: +item.valorAtivo,
+        Valor: item.valorAtivo / 100,
       };
     });
   }
@@ -77,8 +78,3 @@ export class AtivosService {
     });
   }
 }
-
-// }).map((d) => {
-//  const author = await prisma.author.findFirst({where: {id: d.authorId}});
-//  return {...d, author}
-// });

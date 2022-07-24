@@ -19,7 +19,7 @@ export class ContasController {
 
   @Get(':cod')
   async findOne(@Param('cod', ParseIntPipe) cod: number) {
-    return await this.contasService.findOne(cod);
+    return await this.contasService.findOne(cod, true);
   }
 
   @Post('deposito')

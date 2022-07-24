@@ -12,11 +12,11 @@ import { CarteiraEntity } from './entities/carteira.entity';
 export class ContasService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(codCliente: number): Promise<any | Error> {
+  async findOne(codCliente: number, decimal = false): Promise<any | Error> {
     const cliente = await this.findWallet(codCliente);
     return {
       CodCliente: cliente.codCliente,
-      Saldo: +cliente.saldo,
+      Saldo: decimal ? cliente.saldo / 100 : cliente.saldo,
     };
   }
 
@@ -25,13 +25,14 @@ export class ContasService {
       where: { codCliente },
     });
     if (!cliente) {
-      throw new NotFoundException(`Cliente #${codCliente} não encontrado`);
+      throw new NotFoundException(`Client #${codCliente} not found`);
     }
     return cliente;
   }
 
-  async deposit(depositDto: DepositDto): Promise<void | Error> {
-    const { CodCliente, Valor } = depositDto;
+  async deposit(depositDto: DepositDto): Promise<any | void | Error> {
+    const { CodCliente } = depositDto;
+    const valor = depositDto.Valor * 100;
     const client = await this.findOne(CodCliente);
     try {
       await this.prisma.carteira.update({
@@ -41,7 +42,7 @@ export class ContasService {
           saldo: true,
         },
         data: {
-          saldo: client.Saldo + Valor,
+          saldo: client.Saldo + valor,
         },
       });
     } catch (er) {
@@ -50,16 +51,17 @@ export class ContasService {
   }
 
   async withdraw(withdrawDto: WithdrawDto): Promise<void | Error> {
-    const { CodCliente, Valor } = withdrawDto;
+    const { CodCliente } = withdrawDto;
+    const valor = withdrawDto.Valor * 100;
     const client = await this.findOne(CodCliente);
-    if (+client.Saldo - Valor < 0) {
-      throw new BadRequestException('Saldo insuficiente');
+    if (client.Saldo - valor < 0) {
+      throw new BadRequestException('Insufficient funds');
     }
     try {
       await this.prisma.carteira.update({
         where: { codCliente: CodCliente },
         data: {
-          saldo: +client.Saldo - Valor,
+          saldo: client.Saldo - valor,
         },
       });
     } catch (err) {

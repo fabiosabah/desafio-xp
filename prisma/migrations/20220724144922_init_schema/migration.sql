@@ -2,7 +2,7 @@
 CREATE TABLE "TransacaoSaldo" (
     "id" SERIAL NOT NULL,
     "codCliente" INTEGER NOT NULL,
-    "valor" DECIMAL(9,2) NOT NULL,
+    "valor" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "tipo" TEXT NOT NULL,
 
@@ -22,7 +22,7 @@ CREATE TABLE "Conta" (
 -- CreateTable
 CREATE TABLE "Carteira" (
     "id" SERIAL NOT NULL,
-    "saldo" DECIMAL(9,2) NOT NULL DEFAULT 0,
+    "saldo" INTEGER NOT NULL DEFAULT 0,
     "codCliente" INTEGER NOT NULL,
 
     CONSTRAINT "Carteira_pkey" PRIMARY KEY ("id")
@@ -44,7 +44,7 @@ CREATE TABLE "Ativo" (
     "acao" TEXT NOT NULL,
     "codAtivo" INTEGER NOT NULL,
     "qtdDisponivel" INTEGER NOT NULL,
-    "valorAtivo" DECIMAL(9,2) NOT NULL,
+    "valorAtivo" INTEGER NOT NULL,
 
     CONSTRAINT "Ativo_pkey" PRIMARY KEY ("id")
 );
@@ -72,6 +72,9 @@ CREATE UNIQUE INDEX "Conta_codCliente_key" ON "Conta"("codCliente");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Carteira_codCliente_key" ON "Carteira"("codCliente");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CarteiraAtivo_carteiraId_codAtivo_key" ON "CarteiraAtivo"("carteiraId", "codAtivo");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Ativo_codAtivo_key" ON "Ativo"("codAtivo");
