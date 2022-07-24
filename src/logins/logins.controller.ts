@@ -6,7 +6,7 @@ import { LoginsService } from './logins.service';
 export class LoginsController {
   constructor(private readonly loginsService: LoginsService) {}
   @Post('login')
-  async login(@Body() loginDto: LoginDto): Promise<any> {
+  async login(@Body() loginDto): Promise<any> {
     return this.loginsService.login(loginDto);
   }
 }
