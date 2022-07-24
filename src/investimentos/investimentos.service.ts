@@ -77,7 +77,7 @@ export class InvestimentosService {
     }
   }
 
-  async sell(investimentosDto: InvestimentosDto) {
+  async sell(investimentosDto: InvestimentosDto): Promise<void | Error> {
     const { codCliente, codAtivo, qtdeAtivo } = investimentosDto;
     const { quantidade: qtdAtual, carteiraId } =
       await this.prisma.carteiraAtivo.findFirst({

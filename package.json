@@ -24,9 +24,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@fastify/static": "^6.4.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/platform-fastify": "^9.0.5",
     "@nestjs/swagger": "^6.0.4",
     "@prisma/client": "^4.1.0",
     "class-transformer": "^0.5.1",
@@ -51,6 +53,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "28.1.2",
+    "jest-mock-extended": "^2.0.7",
     "prettier": "^2.3.2",
     "prisma": "^4.1.0",
     "source-map-support": "^0.5.20",

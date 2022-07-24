@@ -14,4 +14,9 @@ export class AtivosController {
   async findAll(@Param('cod', ParseIntPipe) cod) {
     return await this.ativosService.findAll(cod);
   }
+
+  @Get('/todos')
+  async groupAtivos() {
+    return await this.ativosService.groupAtivos();
+  }
 }
