@@ -1,7 +1,9 @@
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AtivosService } from './ativos.service';
 
 @Controller('ativos')
+@ApiTags('Ativos')
 export class AtivosController {
   constructor(private readonly ativosService: AtivosService) {}
 
