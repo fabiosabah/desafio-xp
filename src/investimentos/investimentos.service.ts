@@ -21,18 +21,15 @@ export class InvestimentosService {
     const { codCliente, codAtivo, qtdeAtivo } = investimentosDto;
     const { id: carteiraId, saldo } = await this.contas.findWallet(codCliente);
     const ativo = await this.ativos.findOne(codAtivo);
-
     if (qtdeAtivo > ativo.QtdeAtivo)
       throw new BadRequestException(
         'The amount of asset to be sold cannot be greater than the amount available in the portfolio.',
       );
 
-    const purchaseAmount = ativo.Valor * qtdeAtivo * 100;
+    const purchaseAmount = ativo.Valor * qtdeAtivo;
 
     if (purchaseAmount > saldo) {
-      throw new BadRequestException(
-        'Insufficient balance to make the purchase',
-      );
+      throw new BadRequestException('Insufficient funds to make the purchase');
     }
 
     const { quantidade } = await this.prisma.carteiraAtivo.upsert({
@@ -77,8 +74,11 @@ export class InvestimentosService {
     }
   }
 
-  async sell(investimentosDto: InvestimentosDto): Promise<any | void | Error> {
+  async sell(investimentosDto: InvestimentosDto): Promise<void | Error> {
     const { codCliente, codAtivo, qtdeAtivo } = investimentosDto;
+    await this.contas.findOne(codCliente);
+    await this.ativos.findOne(codAtivo);
+
     const carteiraAtivo = await this.prisma.carteiraAtivo.findFirst({
       where: {
         codAtivo,
@@ -104,7 +104,7 @@ export class InvestimentosService {
     const { saldo: balance } = await this.contas.findWallet(codCliente);
     const qtdDisponivel = qtdeAtivo + totalAssets;
     const quantidade = qtdAtual - qtdeAtivo;
-    const valueTransaction = Valor * qtdeAtivo * 100;
+    const valueTransaction = Valor * qtdeAtivo;
     const saldo = balance + valueTransaction;
 
     try {

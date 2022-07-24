@@ -14,12 +14,9 @@ export class ContasService {
 
   async findOne(codCliente: number, decimal = false): Promise<any | Error> {
     const cliente = await this.findWallet(codCliente);
-    if (decimal) {
-      cliente.saldo = cliente.saldo / 100;
-    }
     return {
       CodCliente: cliente.codCliente,
-      Saldo: cliente.saldo,
+      Saldo: decimal ? cliente.saldo / 100 : cliente.saldo,
     };
   }
 
@@ -28,7 +25,7 @@ export class ContasService {
       where: { codCliente },
     });
     if (!cliente) {
-      throw new NotFoundException(`Cliente #${codCliente} não encontrado`);
+      throw new NotFoundException(`Client #${codCliente} not found`);
     }
     return cliente;
   }
@@ -57,9 +54,8 @@ export class ContasService {
     const { CodCliente } = withdrawDto;
     const valor = withdrawDto.Valor * 100;
     const client = await this.findOne(CodCliente);
-    console.log(client);
     if (client.Saldo - valor < 0) {
-      throw new BadRequestException('Saldo insuficiente');
+      throw new BadRequestException('Insufficient funds');
     }
     try {
       await this.prisma.carteira.update({

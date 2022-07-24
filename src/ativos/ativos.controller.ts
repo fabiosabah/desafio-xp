@@ -7,7 +7,7 @@ export class AtivosController {
 
   @Get('/:cod')
   async findOne(@Param('cod', ParseIntPipe) cod) {
-    return await this.ativosService.findOne(cod);
+    return await this.ativosService.findOne(cod, true);
   }
 
   @Get('/cliente/:cod')

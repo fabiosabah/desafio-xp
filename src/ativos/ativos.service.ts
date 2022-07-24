@@ -6,18 +6,19 @@ import { NotFoundException } from '@nestjs/common';
 export class AtivosService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(codAtivo) {
+  async findOne(codAtivo, decimal = false) {
     const ativo = await this.prisma.ativo.findFirst({
       where: { codAtivo },
     });
     if (!ativo) {
-      throw new NotFoundException(`Ativo #${codAtivo} não encontrado`);
+      throw new NotFoundException(`Asset #${codAtivo} not found`);
     }
     const response = {
       CodAtivo: ativo.codAtivo,
       QtdeAtivo: ativo.qtdDisponivel,
-      Valor: ativo.valorAtivo / 100,
+      Valor: decimal ? ativo.valorAtivo / 100 : ativo.valorAtivo,
     };
+
     return response;
   }
 

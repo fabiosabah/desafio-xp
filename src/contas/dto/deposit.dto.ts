@@ -8,7 +8,7 @@ export class DepositDto {
   readonly CodCliente: number;
 
   @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0.1)
+  @Min(0.01)
   @Max(20_000_000)
   @ApiProperty()
   readonly Valor: number;
