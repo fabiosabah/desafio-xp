@@ -1,16 +1,16 @@
 import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-// fazer umas classes para nao escrever isso na mão
-
 async function main() {
+  const password = await bcrypt.hash('pass123456', 10);
   await prisma.conta.upsert({
     where: { email: 'timbersaw@valve.com' },
     update: {},
     create: {
       email: 'timbersaw@valve.com',
-      password: 'pass123456',
+      password,
     },
   });
   await prisma.conta.upsert({
@@ -18,7 +18,7 @@ async function main() {
     update: {},
     create: {
       email: 'phantomlance@valve.com',
-      password: 'pass123456',
+      password,
     },
   });
 
@@ -27,7 +27,7 @@ async function main() {
     update: {},
     create: {
       email: 'meshuggah@music.com',
-      password: 'pass123456',
+      password,
     },
   });
 
@@ -36,7 +36,7 @@ async function main() {
     update: {},
     create: {
       email: 'goldlink@music.com',
-      password: 'pass123456',
+      password,
     },
   });
 
@@ -45,7 +45,7 @@ async function main() {
     update: {},
     create: {
       email: 'baianasystem@music.com',
-      password: 'pass123456',
+      password,
     },
   });
 
@@ -54,7 +54,7 @@ async function main() {
     update: {},
     create: {
       email: 'erykahbadu@music.com',
-      password: 'pass123456',
+      password,
     },
   });
 
