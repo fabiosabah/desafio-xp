@@ -1,10 +1,19 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/common/guards/auth.guard.ts.guard';
 import { InvestimentosDto } from './dto/investimentos.dto';
 import { InvestimentosService } from './investimentos.service';
 
 @Controller('investimentos')
 @ApiTags('Investimentos')
+@UseGuards(AuthGuard)
 export class InvestimentosController {
   constructor(private readonly investimentosService: InvestimentosService) {}
 
@@ -15,7 +24,7 @@ export class InvestimentosController {
   }
 
   @Post('vender')
-  // @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async sell(
     @Body() investimentosDto: InvestimentosDto,
   ): Promise<void | Error> {

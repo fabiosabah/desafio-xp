@@ -16,11 +16,11 @@ import { DepositDto, WithdrawDto } from './dto';
 
 @Controller('conta')
 @ApiTags('conta')
+@UseGuards(AuthGuard)
 export class ContasController {
   constructor(private readonly contasService: ContasService) {}
 
   @Get(':cod')
-  @UseGuards(AuthGuard)
   async findOne(@Param('cod', ParseIntPipe) cod: number) {
     return await this.contasService.findOne(cod, true);
   }
