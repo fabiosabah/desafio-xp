@@ -16,14 +16,13 @@ export class AuthMiddleware implements NestMiddleware {
     const token = req.headers.authorization;
 
     try {
-      const decode: any = verify(token, 'token_secret');
+      const decode: any = verify(token, process.env.TOKEN_SECRET);
       const cliente = await this.prisma.carteira.findFirst({
         where: { id: decode.CarteiraId },
       });
       req.cliente = cliente;
       next();
     } catch (error) {
-      console.log(error);
       req.cliente = null;
       next();
     }

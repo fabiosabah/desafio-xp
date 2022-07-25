@@ -1,38 +1,42 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Back-End XPinc
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Esse projeto é um desafio feito para o processo seletivo da XPinc.
 
-## Description
+## Features
+- Comprar e vender ativos
+- Saque e depósito em carteira
+- Consulta de ativos geral, por código e por carteira
+- Autenticação por login
+- Histórico de transações de ativos e saldo de carteira
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Stack
+- Typescript
+- NestJs
+- Prisma
+- Postgres
+- JWT
+- Bcrypt
+- Swagger
+- class-validator
+- class-transformer
 
-## Installation
+# Instruções
+## Requisitos 
+- nodejs
+- docker
+- docker-compose
+
+## Instalação
 
 ```bash
 $ npm install
+$ docker-compose up 
+$ npx prisma migrate -dev
+$ npx prisma db seed
 ```
 
-## Running the app
+## Rodando a aplicação
 
 ```bash
 # development
@@ -40,31 +44,49 @@ $ npm run start
 
 # watch mode
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
+`OBS: Por padrão, o projeto utiliza a porta 3000 para rodar o NestJs e a porta 5432 para rodar o banco de dados Postgres`
 
-## Test
+# Decisões de projeto
+## Tecnologias usadas
+Nesse projeto, escolhi trabalhar com o framework `NestJs`, para criar uma aplicação robusta, modular e escalável, além de ampliar meus conhecimentos em `Typescript` e em um dos frameworks de maior ancensão no momento (NestJS).
 
-```bash
-# unit tests
-$ npm run test
+Comecei a desenvolver esse projeto com `TypeORM`, mas migrei para `Prisma` no meio do processo. O `Prisma` mostrou-se amigável e, ao ler a sua documentação, me interressei pela facilidade de fazer as querys a partir de objetos e criar relações entre entidades de forma mais fácil, além de maior controle na modelagem do Schema.
 
-# e2e tests
-$ npm run test:e2e
+Outra mudança que ocorreu durante o desenvolvimento, foi trocar a tipagem dos valores referentes a **moeda** no banco de dados. Inicialmente, escolhi utilizar tipos com ponto flutuante, mas após pesquisa, julguei melhor alterá-los para `Int`, devido a maior segurança nas operações aritméticas (risco de overflow ou erros de precisão). Durante a pesquisa, testei bibliotecas como `DecimalJS` e `DineroJS`, mas optei pela simplicidade de utilizar `Int` e adicionei conversões para `Float` (multiplicando e dividindo por 100) nos endpoints, dessa forma a API consome e retorna valores decimais, mas internamente trabalha com inteiros.
 
-# test coverage
-$ npm run test:cov
-```
+## Modelagem do Banco de Dados
 
-## Support
+Analisando os requisitos do desafio, desenvolvi este diagrama de relação entre entidades.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+![Schema](public/dbschema.png)
 
-## Stay in touch
+Além de tabelas para armazenar os dados de Conta, Carteira e Ativo. Criei também duas tabelas para armazenar históricos de operações: uma tabela para armazenar as mudanças nos saldos dos usuários (a partir de depositos e saques) e outra para armazenar o histórico de transações de compra e venda de ativos.
 
-## License
+## Rotas 
 
-Nest is [MIT licensed](LICENSE).
-# desafio-xp
+### Módulos:
+As Rotas foram divididas em quatro módulos:
+
+#### Contas 
+Todas os endpoints referentes a saque, depósito e consulta de saldos dos usuários.
+#### Ativos
+Todos os endpoints referentes a consulta de informações de ativos e de carteiras.
+#### Investimentos
+Todas os endpoints referentes a compra e venda de ativos.
+#### Login
+O endpoint criado para autenticação e geração de token.
+
+### Validações
+Todas as rotas de método `POST` possuem validações nos campos de entrada. Essas validações podem ser encontradas nos `dtos` de seus módulos
+
+### Documentação
+A documentação de todas as rotas está disponivel na url /api
+
+![Rotas](public/swagger.png)
+
+# Considerações 
+Foi muito desafiador desenvolver esse projeto, pois utilizei tecnologias novas para mim, que não foram abordadas na Trybe. Mas, apesar de não conhecer essas tecnologias, consegui usar meu conhecimento para aprender-las rapidamente.
+
+Contudo, saio engrandecido por percorrer esse caminho de descobertas. Muito conhecimento foi obtido  e desafios foram superados nesse processo. A exemplo disso, posso citar a adaptação à mudança de ORM que houve durante a execução do projeto e a alteração de tipagem em campos do banco de dados.
+

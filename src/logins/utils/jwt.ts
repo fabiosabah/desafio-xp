@@ -7,7 +7,7 @@ export function generateJwt(contaEntity) {
       Email: contaEntity.email,
       CarteiraId: contaEntity.id,
     },
-    'token_secret',
+    process.env.TOKEN_SECRET,
     { expiresIn: '24h', algorithm: 'HS256' },
   );
 }

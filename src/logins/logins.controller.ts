@@ -13,7 +13,6 @@ export class LoginsController {
     @Body() loginDto: LoginDto,
     @Req() req: ExpressRequest,
   ): Promise<any> {
-    console.log(req.cliente);
     return this.loginsService.login(loginDto);
   }
 }
