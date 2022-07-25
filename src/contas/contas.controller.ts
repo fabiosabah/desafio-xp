@@ -7,8 +7,10 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/common/guards/auth.guard.ts.guard';
 import { ContasService } from './contas.service';
 import { DepositDto, WithdrawDto } from './dto';
 
@@ -18,6 +20,7 @@ export class ContasController {
   constructor(private readonly contasService: ContasService) {}
 
   @Get(':cod')
+  @UseGuards(AuthGuard)
   async findOne(@Param('cod', ParseIntPipe) cod: number) {
     return await this.contasService.findOne(cod, true);
   }

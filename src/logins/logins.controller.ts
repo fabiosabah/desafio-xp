@@ -1,6 +1,5 @@
 import { Body, Controller, Post, Req } from '@nestjs/common';
 import { ExpressRequest } from 'src/types/expressRequest.interface';
-import { LoginDto } from './dto/login.dto';
 import { LoginsService } from './logins.service';
 
 @Controller()

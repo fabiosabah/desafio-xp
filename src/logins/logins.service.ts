@@ -4,7 +4,6 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { LoginDto } from './dto/login.dto';
 import { compare } from 'bcrypt';
 import { generateJwt } from './utils/jwt';
 @Injectable()
