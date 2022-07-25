@@ -32,6 +32,11 @@ Esse projeto é um desafio feito para o processo seletivo da XPinc.
 ```bash
 $ npm install
 $ docker-compose up 
+```
+
+## Populando o banco de dados para testes
+
+```bash
 $ npx prisma migrate -dev
 $ npx prisma db seed
 ```
@@ -47,9 +52,30 @@ $ npm run start:dev
 ```
 `OBS: Por padrão, o projeto utiliza a porta 3000 para rodar o NestJs e a porta 5432 para rodar o banco de dados Postgres`
 
+## Usando a aplicação
+Para utilizar a API, devemos primeiramente gerar um token. Para isso, dê um POST no endpoint `/login` com suas credenciais, por exemplo::
+
+```json
+{
+	"email": "timbersaw@valve.com",
+	"password": "pass123456"
+}
+```
+O token vai ser gerado e será retornado na resposta da requisição, por exemplo:
+```json
+{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDb2RDbGllbnRlIjoxLCJFbWFpbCI6InRpbWJlcnNhd0B2YWx2ZS5jb20iLCJDYXJ0ZWlyYUlkIjoxLCJpYXQiOjE2NTg3MTU0ODAsImV4cCI6MTY1ODgwMTg4MH0.edbRiSc2XBN235XeHF5aQHrmaI6JGj20fp7UVEwAUbQ"
+}
+```
+Para acessar a maioria das rotas, você deve adicionar na requisição o `header`:
+```
+Authorization: TOKEN_GERADO
+```
+
+
 # Decisões de projeto
 ## Tecnologias usadas
-Nesse projeto, escolhi trabalhar com o framework `NestJs`, para criar uma aplicação robusta, modular e escalável, além de ampliar meus conhecimentos em `Typescript` e em um dos frameworks de maior ancensão no momento (NestJS).
+Nesse projeto, escolhi trabalhar com o framework `NestJs`, para criar uma aplicação robusta, modular e escalável, além de ampliar meus conhecimentos em `Typescript` e em um dos frameworks de maior ancensão no momento (NestJS)
 
 Comecei a desenvolver esse projeto com `TypeORM`, mas migrei para `Prisma` no meio do processo. O `Prisma` mostrou-se amigável e, ao ler a sua documentação, me interressei pela facilidade de fazer as querys a partir de objetos e criar relações entre entidades de forma mais fácil, além de maior controle na modelagem do Schema.
 
