@@ -15,7 +15,7 @@ import { ContasService } from './contas.service';
 import { DepositDto, WithdrawDto } from './dto';
 
 @Controller('conta')
-@ApiTags('conta')
+@ApiTags('Contas')
 @UseGuards(AuthGuard)
 export class ContasController {
   constructor(private readonly contasService: ContasService) {}
