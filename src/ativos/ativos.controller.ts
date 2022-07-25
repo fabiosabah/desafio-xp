@@ -1,5 +1,12 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/common/guards/auth.guard.ts.guard';
 import { AtivosService } from './ativos.service';
 
 @Controller('ativos')
@@ -13,6 +20,7 @@ export class AtivosController {
   }
 
   @Get('/cliente/:cod')
+  @UseGuards(AuthGuard)
   async findAll(@Param('cod', ParseIntPipe) cod) {
     return await this.ativosService.findAll(cod);
   }

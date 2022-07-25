@@ -7,13 +7,16 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/common/guards/auth.guard.ts.guard';
 import { ContasService } from './contas.service';
 import { DepositDto, WithdrawDto } from './dto';
 
 @Controller('conta')
 @ApiTags('conta')
+@UseGuards(AuthGuard)
 export class ContasController {
   constructor(private readonly contasService: ContasService) {}
 
